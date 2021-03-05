@@ -1,0 +1,11 @@
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/.bsp
+.metals
+/RUNNING_PID
+docker/db/data/
