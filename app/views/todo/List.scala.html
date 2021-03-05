@@ -1,0 +1,8 @@
+@(vv: model.ViewValueCommon, todo_list: Seq[lib.model.Todo])
+@common.Default(vv){
+<ul>
+    @for(todo <- todo_list) {
+        <li>@todo.title</li>
+    }
+</ul>
+}

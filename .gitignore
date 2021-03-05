@@ -5,7 +5,11 @@ target
 /.classpath
 /.project
 /.settings
-/.bsp
 .metals
 /RUNNING_PID
 docker/db/data/
+
+/.bsp
+/.bloop
+/.vscode
+project
