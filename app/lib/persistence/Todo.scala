@@ -12,6 +12,11 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
   with db.SlickResourceProvider[P] {
     import api._
 
+    def getAll: Future[Seq[EntityEmbeddedId]] =
+      RunDBAction(TodoTable, "slave") {
+        _.result
+      }
+
     def get(id: Id): Future[Option[EntityEmbeddedId]] =
       RunDBAction(TodoTable, "slave") { _
         .filter(_.id === id)
