@@ -8,7 +8,7 @@ import lib.model.Todo
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
-    val todo_list_sample: Seq[Todo] = (0 to 10).map(i => Todo(i, s"todo $i"))
+    val todo_list_sample: Seq[Todo] = (0 to 10).map(i => Todo(s"todo $i"))
 
     def list() = Action { implicit request => 
         val vv = ViewValueHome(
