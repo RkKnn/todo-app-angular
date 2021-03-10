@@ -2,7 +2,10 @@
 @common.Default(vv){
 <ul>
     @for(todo <- todo_list) {
-        <li>@todo.title</li>
+        <li>
+            <h2>@todo.title</h2>
+            <p>@todo.body</p>
+        </li>
     }
 </ul>
 }
