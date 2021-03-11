@@ -1,7 +1,8 @@
-@(vv: model.ViewValueCommon, todo_list: Seq[lib.model.Todo])
+@(vv: model.todo.ViewValueList)(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
 <ul>
-    @for(todo <- todo_list) {
+    @UpdateForm(vv.registerForm)
+    @for(todo <- vv.todoList) {
         <li>
             <h2>@todo.title</h2>
             <p>@todo.body</p>
