@@ -35,3 +35,13 @@ case class TodoTable[P <: JdbcProfile]()(implicit val driver: P) extends Table[T
     )
   }
 }
+
+sealed trait StateType {
+  val state: Int
+}
+
+object StateType {
+  object Active extends StateType { val state = 0 }
+  object Done extends StateType { val state = 1 }
+  object Archive extends StateType { val state = 2 }
+}

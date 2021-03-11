@@ -19,6 +19,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.i18n._
 import ixias.model.Entity
+import lib.persistence.db.StateType
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -30,7 +31,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
     def list() = Action.async { implicit request => 
         TodoRepository().getAll.map { value => 
-            val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, DeleteFormData.deleteForm, value.map(_.v))
+            val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
             Ok(views.html.todo.List(todo_list_vv))
         }
     }
@@ -39,7 +40,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         RegisterFormData.registerForm.bindFromRequest().fold (
             (formWithErrors: Form[RegisterFormData]) => {
                 TodoRepository().getAll.map { value => 
-                    val todo_list_vv = ViewValueList(vv, formWithErrors, DeleteFormData.deleteForm, value.map(_.v))
+                    val todo_list_vv = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
                     // Ok(views.html.todo.List(todo_list_vv))
                     BadRequest(views.html.todo.List(todo_list_vv))
                 }
@@ -54,11 +55,21 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
     }
 
     def delete() = Action.async { implicit request =>
-        DeleteFormData.deleteForm.bindFromRequest().fold (
-            (formWithErrors: Form[DeleteFormData]) => Future.successful(Redirect("/todo")),
-            (formData: DeleteFormData) => {
-                println(formData.ids)
+        SelectIdFormData.selectIdForm.bindFromRequest().fold (
+            (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect("/todo")),
+            (formData: SelectIdFormData) => {
                 TodoRepository().removeAll(formData.ids.map(Todo.Id(_))).map { _ =>
+                    Redirect("/todo")
+                }
+            }
+        )
+    }
+
+    def update() = Action.async { implicit request =>
+        SelectIdFormData.selectIdForm.bindFromRequest().fold (
+            (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect("/todo")),
+            (formData: SelectIdFormData) => {
+                TodoRepository().updateStateAll(formData.ids.map(Todo.Id(_)), StateType.Done).map { _ =>
                     Redirect("/todo")
                 }
             }

@@ -3,7 +3,7 @@
 <ul>
     @UpdateForm(vv.registerForm)
 
-    @helper.form(action = controllers.todo.routes.TodoController.delete()) {
+    @helper.form(action = controllers.todo.routes.TodoController.update()) {
         @helper.CSRF.formField
 
         @for(todo <- vv.todoList) {
@@ -15,7 +15,9 @@
                 </li>
             </label>
         }
-        <input type="submit" value="削除">
+
+        <input type="submit" value="更新">
+        <input type="submit" value="削除" formaction="@controllers.todo.routes.TodoController.delete()">
     }
 </ul>
 }

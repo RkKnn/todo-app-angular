@@ -12,11 +12,11 @@ object RegisterFormData {
   )
 }
 
-case class DeleteFormData(ids: Seq[Long])
-object DeleteFormData {
-  val deleteForm = Form(
+case class SelectIdFormData(ids: Seq[Long])
+object SelectIdFormData {
+  val selectIdForm = Form(
     mapping(
       "ids" -> seq(longNumber)
-    )(DeleteFormData.apply)(DeleteFormData.unapply)
+    )(SelectIdFormData.apply)(SelectIdFormData.unapply)
   )
 }

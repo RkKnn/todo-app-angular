@@ -6,6 +6,7 @@ import lib.model.Todo
 import slick.jdbc.JdbcProfile
 import ixias.model.{Entity, IdStatus}
 import shapeless.tag
+import lib.persistence.db.StateType
 
 case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[Todo.Id, Todo, P]
@@ -26,6 +27,11 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
     def add(entity: EntityWithNoId): Future[Id] =
       RunDBAction(TodoTable) { slick =>
         slick returning slick.map(_.id) += entity.v
+      }
+    
+    def updateStateAll(ids: Seq[Id], stateType: StateType): Future[Int] =
+      RunDBAction(TodoTable) { slick =>
+        slick.filter(_.id.inSetBind(ids)).map(_.state).update(stateType.state)
       }
     
     def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =
