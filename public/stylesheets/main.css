@@ -39,6 +39,12 @@ body {
 }
 
 
+.todo-list {
+  border: solid;
+  background-color: azure;
+}
+
+
 /******* フォームのinfoを非表示に *******/
 .info {
   display: none;

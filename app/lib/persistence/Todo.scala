@@ -39,6 +39,11 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
             }
           } yield old
         }
+      
+    def removeAll(ids: Seq[Id]): Future[Int] =
+        RunDBAction(TodoTable) { slick =>
+          slick.filter(_.id.inSetBind(ids)).delete
+        }
     
     def remove(id: Id): Future[Option[EntityEmbeddedId]] =
         RunDBAction(TodoTable) { slick =>

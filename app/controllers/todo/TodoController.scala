@@ -18,18 +18,10 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.i18n._
-
-case class RegisterFormData (title: String, body: String)
+import ixias.model.Entity
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
-    val registerForm = Form(
-        mapping(
-            "title" -> nonEmptyText(maxLength = 255),
-            "body" -> nonEmptyText()
-        )(RegisterFormData.apply)(RegisterFormData.unapply)
-    )
-
     val vv = ViewValueHome(
         title  = "Todo一覧",
         cssSrc = Seq("main.css"),
@@ -38,16 +30,16 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
     def list() = Action.async { implicit request => 
         TodoRepository().getAll.map { value => 
-            val todo_list_vv = ViewValueList(vv, registerForm, value.map(_.v))
+            val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, DeleteFormData.deleteForm, value.map(_.v))
             Ok(views.html.todo.List(todo_list_vv))
         }
     }
 
     def register() = Action.async { implicit request =>
-        registerForm.bindFromRequest().fold (
+        RegisterFormData.registerForm.bindFromRequest().fold (
             (formWithErrors: Form[RegisterFormData]) => {
                 TodoRepository().getAll.map { value => 
-                    val todo_list_vv = ViewValueList(vv, formWithErrors, value.map(_.v))
+                    val todo_list_vv = ViewValueList(vv, formWithErrors, DeleteFormData.deleteForm, value.map(_.v))
                     // Ok(views.html.todo.List(todo_list_vv))
                     BadRequest(views.html.todo.List(todo_list_vv))
                 }
@@ -61,6 +53,15 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         )
     }
 
-    def remove() = Action.async { implicit request =>
+    def delete() = Action.async { implicit request =>
+        DeleteFormData.deleteForm.bindFromRequest().fold (
+            (formWithErrors: Form[DeleteFormData]) => Future.successful(Redirect("/todo")),
+            (formData: DeleteFormData) => {
+                println(formData.ids)
+                TodoRepository().removeAll(formData.ids.map(Todo.Id(_))).map { _ =>
+                    Redirect("/todo")
+                }
+            }
+        )
     }
 }

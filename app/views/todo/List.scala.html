@@ -2,11 +2,20 @@
 @common.Default(vv){
 <ul>
     @UpdateForm(vv.registerForm)
-    @for(todo <- vv.todoList) {
-        <li>
-            <h2>@todo.title</h2>
-            <p>@todo.body</p>
-        </li>
+
+    @helper.form(action = controllers.todo.routes.TodoController.delete()) {
+        @helper.CSRF.formField
+
+        @for(todo <- vv.todoList) {
+            <label for="delete_id_@todo.id">
+                <li class="todo-list">
+                    <input type="checkbox" id="delete_id_@todo.id" name="ids[]" value=@todo.id>
+                    <h2>@todo.title</h2>
+                    <p>@todo.body</p>
+                </li>
+            </label>
+        }
+        <input type="submit" value="削除">
     }
 </ul>
 }

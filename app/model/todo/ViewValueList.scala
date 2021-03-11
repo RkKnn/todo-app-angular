@@ -10,6 +10,7 @@ import model.ViewValueCommon
 case class ViewValueList(
   common: ViewValueCommon,
   registerForm: Form[controllers.todo.RegisterFormData],
+  deleteForm: Form[controllers.todo.DeleteFormData],
   todoList: Seq[lib.model.Todo]
 ) extends HasCommon
 
