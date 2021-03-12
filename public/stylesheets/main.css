@@ -38,10 +38,40 @@ body {
   text-align:  center;
 }
 
-
 .todo-list {
   border: solid;
+  padding: 10px;
+  list-style-type: none;
+}
+
+.todo-list .todo-list__item {
+  border: solid;
+}
+
+.todo-list .todo-list__checkbox {
+  display: none;
+}
+
+.todo-list .todo-list__item_active {
   background-color: azure;
+}
+
+.todo-list .todo-list__checkbox:checked + .todo-list__item_active {
+  border: solid red;
+  background-color: greenyellow;
+}
+
+.todo-list .todo-list__item_done {
+  background-color: greenyellow;
+}
+
+.todo-list .todo-list__checkbox:checked + .todo-list__item_done {
+  border: solid red;
+  background-color: azure;
+}
+
+.todo-list .todo-list__item_archive {
+  display: none;
 }
 
 

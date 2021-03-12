@@ -1,6 +1,6 @@
 @(vv: model.todo.ViewValueList)(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
-<ul>
+<ul class="todo-list">
     @UpdateForm(vv.registerForm)
 
     @helper.form(action = controllers.todo.routes.TodoController.update()) {
@@ -8,8 +8,10 @@
 
         @for(todo <- vv.todoList) {
             <label for="delete_id_@todo.id">
-                <li class="todo-list">
-                    <input type="checkbox" id="delete_id_@todo.id" name="ids[]" value=@todo.id>
+                <input class="todo-list__checkbox" type="checkbox" id="delete_id_@todo.id" name="ids[]" value=@todo.id>
+                @defining(Map(0 -> "active", 1 -> "done", 2 -> "archive")) { convert =>
+                    <li class="todo-list__item todo-list__item_@convert(todo.state)">
+                }
                     <h2>@todo.title</h2>
                     <p>@todo.body</p>
                 </li>

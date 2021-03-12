@@ -28,10 +28,40 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
       RunDBAction(TodoTable) { slick =>
         slick returning slick.map(_.id) += entity.v
       }
+      
+    def archiveAll(ids: Seq[Id]): Future[Int] =
+      RunDBAction(TodoTable) {
+        _.filter(_.id.inSetBind(ids)).map(_.state).update(StateType.Archive.state)
+      }
+
+    def unarchiveAll(ids: Seq[Id]): Future[Int] =
+      RunDBAction(TodoTable) {
+        _.filter(_.id.inSetBind(ids)).map(_.state).update(StateType.Active.state)
+      }
     
-    def updateStateAll(ids: Seq[Id], stateType: StateType): Future[Int] =
+    def toggleStateAll(ids: Seq[Id]): Future[_] =
       RunDBAction(TodoTable) { slick =>
-        slick.filter(_.id.inSetBind(ids)).map(_.state).update(stateType.state)
+        for {
+          old <- slick
+            .filter(_.id.inSetBind(ids))
+            .map(todo => (todo.id, todo.state))
+            .result
+
+          grouped = old.groupBy(_._2)
+            .transform((key, values) => values.map(value => Todo.Id(value._1)))
+
+          activeIds = grouped.getOrElse(StateType.Active.state, Seq.empty)
+          _ <- slick
+            .filter(_.id.inSetBind(activeIds))
+            .map(_.state)
+            .update(StateType.Done.state)
+
+          doneIds = grouped.getOrElse(StateType.Done.state, Seq.empty)
+          _ <- slick
+            .filter(_.id.inSetBind(doneIds))
+            .map(_.state)
+            .update(StateType.Active.state)
+        } yield old
       }
     
     def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =

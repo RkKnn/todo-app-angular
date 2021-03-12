@@ -69,7 +69,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         SelectIdFormData.selectIdForm.bindFromRequest().fold (
             (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect("/todo")),
             (formData: SelectIdFormData) => {
-                TodoRepository().updateStateAll(formData.ids.map(Todo.Id(_)), StateType.Done).map { _ =>
+                TodoRepository().toggleStateAll(formData.ids.map(Todo.Id(_))).map { _ =>
                     Redirect("/todo")
                 }
             }
