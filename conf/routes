@@ -5,10 +5,13 @@
 
 # An example controller showing a sample home page
 GET     /                             controllers.HomeController.index
-GET     /todo                         controllers.todo.TodoController.list()
+GET     /todo                         controllers.todo.TodoController.list_page()
+GET     /todo/trush                   controllers.todo.TodoController.trush_page()
 POST    /todo/register                controllers.todo.TodoController.register()
+POST    /todo/archive                 controllers.todo.TodoController.archive()
+POST    /todo/unarchive               controllers.todo.TodoController.unarchive()
 POST    /todo/delete                  controllers.todo.TodoController.delete()
-POST    /todo/update                    controllers.todo.TodoController.update()
+POST    /todo/update                  controllers.todo.TodoController.update()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

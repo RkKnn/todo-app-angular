@@ -52,8 +52,16 @@ body {
   display: none;
 }
 
+.todo-list .todo-list__trush-checkbox {
+  display: none;
+}
+
 .todo-list .todo-list__item_active {
   background-color: azure;
+}
+
+.todo-list .todo-list__trush-checkbox:checked + .todo-list__item {
+  border: solid red;
 }
 
 .todo-list .todo-list__checkbox:checked + .todo-list__item_active {
@@ -72,6 +80,10 @@ body {
 
 .todo-list .todo-list__item_archive {
   display: none;
+}
+
+.todo-list .todo-list__item_open-archive {
+  background-color: salmon;
 }
 
 

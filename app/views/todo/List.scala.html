@@ -1,5 +1,8 @@
 @(vv: model.todo.ViewValueList)(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
+
+<a href="@controllers.todo.routes.TodoController.trush_page()">ゴミ箱へ</a>
+
 <ul class="todo-list">
     @UpdateForm(vv.registerForm)
 
@@ -7,8 +10,8 @@
         @helper.CSRF.formField
 
         @for(todo <- vv.todoList) {
-            <label for="delete_id_@todo.id">
-                <input class="todo-list__checkbox" type="checkbox" id="delete_id_@todo.id" name="ids[]" value=@todo.id>
+            <label for="select_id_@todo.id">
+                <input class="todo-list__checkbox" type="checkbox" id="select_id_@todo.id" name="ids[]" value=@todo.id>
                 @defining(Map(0 -> "active", 1 -> "done", 2 -> "archive")) { convert =>
                     <li class="todo-list__item todo-list__item_@convert(todo.state)">
                 }
@@ -19,7 +22,6 @@
         }
 
         <input type="submit" value="更新">
-        <input type="submit" value="削除" formaction="@controllers.todo.routes.TodoController.delete()">
     }
 </ul>
 }
