@@ -1,7 +1,7 @@
 @(vv: model.todo.ViewValueList)(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
 
-<a href="@controllers.todo.routes.TodoController.trush_page()">ゴミ箱へ</a>
+<a href="@controllers.todo.routes.TodoController.trushPage()">ゴミ箱へ</a>
 
 <ul class="todo-list">
     @UpdateForm(vv.registerForm)
