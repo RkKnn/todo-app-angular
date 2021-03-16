@@ -30,33 +30,57 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
     )
 
     def listPage() = Action.async { implicit request => 
-        TodoRepository().getAll.map { value => 
+        for {
+            value <- TodoRepository().getAll
+        } yield {
             val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
             Ok(views.html.todo.List(todo_list_vv))
         }
+        // TodoRepository().getAll.map { value => 
+        //     val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+        //     Ok(views.html.todo.List(todo_list_vv))
+        // }
     }
 
     def trushPage() = Action.async { implicit request => 
-        TodoRepository().getAll.map { value => 
+        for {
+            value <- TodoRepository().getAll
+        } yield {
             val todo_list_vv = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
             Ok(views.html.todo.Trush(todo_list_vv))
         }
+        // TodoRepository().getAll.map { value => 
+        //     val todo_list_vv = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+        //     Ok(views.html.todo.Trush(todo_list_vv))
+        // }
     }
 
     def register() = Action.async { implicit request =>
         RegisterFormData.registerForm.bindFromRequest().fold (
             (formWithErrors: Form[RegisterFormData]) => {
-                TodoRepository().getAll.map { value => 
+                for {
+                    value <- TodoRepository().getAll
+                } yield { 
                     val todo_list_vv = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
                     // Ok(views.html.todo.List(todo_list_vv))
                     BadRequest(views.html.todo.List(todo_list_vv))
                 }
+                // TodoRepository().getAll.map { value => 
+                //     val todo_list_vv = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
+                //     // Ok(views.html.todo.List(todo_list_vv))
+                //     BadRequest(views.html.todo.List(todo_list_vv))
+                // }
             },
             (formData: RegisterFormData) => {
                 val todo = Todo(0, formData.title, formData.body, 0)
-                TodoRepository().add(todo).map { _ =>
+                for {
+                    _ <- TodoRepository().add(todo)
+                } yield {
                     Redirect(controllers.todo.routes.TodoController.listPage())
                 }
+                // TodoRepository().add(todo).map { _ =>
+                //     Redirect(controllers.todo.routes.TodoController.listPage())
+                // }
             }
         )
     }
@@ -65,9 +89,14 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         SelectIdFormData.selectIdForm.bindFromRequest().fold (
             (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.TodoController.trushPage())),
             (formData: SelectIdFormData) => {
-                success(formData).map { _ =>
+                for {
+                    _ <- success(formData)
+                } yield {
                     Redirect(controllers.todo.routes.TodoController.trushPage())
                 }
+                // success(formData).map { _ =>
+                //     Redirect(controllers.todo.routes.TodoController.trushPage())
+                // }
             }
         )
     }
@@ -88,7 +117,9 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         SelectIdFormData.selectIdForm.bindFromRequest().fold (
             (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.TodoController.listPage())),
             (formData: SelectIdFormData) => {
-                TodoRepository().toggleStateAll(formData.ids.map(Todo.Id(_))).map { _ =>
+                for {
+                    _ <- TodoRepository().toggleStateAll(formData.ids.map(Todo.Id(_)))
+                } yield {
                     Redirect(controllers.todo.routes.TodoController.listPage())
                 }
             }
