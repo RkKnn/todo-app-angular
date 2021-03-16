@@ -7,6 +7,7 @@ import slick.jdbc.JdbcProfile
 import ixias.model.{Entity, IdStatus}
 import shapeless.tag
 import lib.persistence.db.StateType
+import java.time.LocalDateTime
 
 case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[Todo.Id, Todo, P]
@@ -14,8 +15,9 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
     import api._
 
     def getAll: Future[Seq[EntityEmbeddedId]] =
-      RunDBAction(TodoTable, "slave") {
-        _.result
+      RunDBAction(TodoTable, "slave") { _
+        // .sortBy(_.updatedAt.desc)
+        .result
       }
 
     def get(id: Id): Future[Option[EntityEmbeddedId]] =
