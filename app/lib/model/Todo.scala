@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import Todo._
 case class Todo(
     id: Option[Id],
-    category_id: Long,
+    category_id: Category.Id,
     title: String,
     body: String,
     state: Int,
@@ -20,7 +20,7 @@ object Todo {
   type WithNoId = Entity.WithNoId[Id, Todo]
   type EmbeddedId = Entity.EmbeddedId[Id, Todo]
 
-  def apply(categoryId: Long, title: String, body: String, state: Int): WithNoId = {
+  def apply(categoryId: Category.Id, title: String, body: String, state: Int): WithNoId = {
     new Entity.WithNoId(new Todo(
       None, categoryId, title, body, state
     ))

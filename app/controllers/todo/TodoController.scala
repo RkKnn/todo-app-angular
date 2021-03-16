@@ -20,6 +20,7 @@ import play.api.data.Forms._
 import play.api.i18n._
 import ixias.model.Entity
 import lib.persistence.db.StateType
+import lib.model.Category
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -53,7 +54,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
                 }
             },
             (formData: RegisterFormData) => {
-                val todo = Todo(0, formData.title, formData.body, 0)
+                val todo = Todo(Category.Id(0), formData.title, formData.body, StateType.Active.state)
                 TodoRepository().add(todo).map { _ =>
                     Redirect(controllers.todo.routes.TodoController.list_page())
                 }
