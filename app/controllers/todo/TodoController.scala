@@ -29,14 +29,14 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         jsSrc  = Seq("main.js")
     )
 
-    def list_page() = Action.async { implicit request => 
+    def listPage() = Action.async { implicit request => 
         TodoRepository().getAll.map { value => 
             val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
             Ok(views.html.todo.List(todo_list_vv))
         }
     }
 
-    def trush_page() = Action.async { implicit request => 
+    def trushPage() = Action.async { implicit request => 
         TodoRepository().getAll.map { value => 
             val todo_list_vv = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
             Ok(views.html.todo.Trush(todo_list_vv))
@@ -55,7 +55,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
             (formData: RegisterFormData) => {
                 val todo = Todo(0, formData.title, formData.body, 0)
                 TodoRepository().add(todo).map { _ =>
-                    Redirect(controllers.todo.routes.TodoController.list_page())
+                    Redirect(controllers.todo.routes.TodoController.listPage())
                 }
             }
         )
@@ -63,10 +63,10 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
     private def trush(success: SelectIdFormData => Future[_]) = Action.async { implicit request =>
         SelectIdFormData.selectIdForm.bindFromRequest().fold (
-            (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.TodoController.trush_page())),
+            (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.TodoController.trushPage())),
             (formData: SelectIdFormData) => {
                 success(formData).map { _ =>
-                    Redirect(controllers.todo.routes.TodoController.trush_page())
+                    Redirect(controllers.todo.routes.TodoController.trushPage())
                 }
             }
         )
@@ -86,10 +86,10 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
     def update() = Action.async { implicit request =>
         SelectIdFormData.selectIdForm.bindFromRequest().fold (
-            (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.TodoController.list_page())),
+            (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.TodoController.listPage())),
             (formData: SelectIdFormData) => {
                 TodoRepository().toggleStateAll(formData.ids.map(Todo.Id(_))).map { _ =>
-                    Redirect(controllers.todo.routes.TodoController.list_page())
+                    Redirect(controllers.todo.routes.TodoController.listPage())
                 }
             }
         )

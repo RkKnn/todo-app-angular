@@ -5,8 +5,8 @@
 
 # An example controller showing a sample home page
 GET     /                             controllers.HomeController.index
-GET     /todo                         controllers.todo.TodoController.list_page()
-GET     /todo/trush                   controllers.todo.TodoController.trush_page()
+GET     /todo                         controllers.todo.TodoController.listPage()
+GET     /todo/trush                   controllers.todo.TodoController.trushPage()
 POST    /todo/register                controllers.todo.TodoController.register()
 POST    /todo/archive                 controllers.todo.TodoController.archive()
 POST    /todo/unarchive               controllers.todo.TodoController.unarchive()

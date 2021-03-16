@@ -1,7 +1,7 @@
 @(vv: model.todo.ViewValueList)(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
 
-<a href="@controllers.todo.routes.TodoController.list_page()">Todo一覧へ</a>
+<a href="@controllers.todo.routes.TodoController.listPage()">Todo一覧へ</a>
 
 <ul class="todo-list">
     @helper.form(action = controllers.todo.routes.TodoController.archive()) {
