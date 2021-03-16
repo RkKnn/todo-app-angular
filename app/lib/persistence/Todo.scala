@@ -32,17 +32,23 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
       }
       
     def archiveAll(ids: Seq[Id]): Future[Int] =
-      RunDBAction(TodoTable) {
-        _.filter(_.id.inSetBind(ids)).map(_.state).update(StateType.Archive.state)
+      RunDBAction(TodoTable) { slick: TodoTable.Query =>
+        slick
+        .filter(_.id.inSetBind(ids))
+        .map(_.state)
+        .update(StateType.Archive.state)
       }
 
     def unarchiveAll(ids: Seq[Id]): Future[Int] =
-      RunDBAction(TodoTable) {
-        _.filter(_.id.inSetBind(ids)).map(_.state).update(StateType.Active.state)
+      RunDBAction(TodoTable) { slick =>
+        slick
+        .filter(_.id.inSetBind(ids))
+        .map(_.state)
+        .update(StateType.Active.state)
       }
     
     def toggleStateAll(ids: Seq[Id]): Future[_] =
-      RunDBAction(TodoTable) { slick =>
+      RunDBAction(TodoTable) { slick: TodoTable.Query =>
         for {
           old <- slick
             .filter(_.id.inSetBind(ids))
