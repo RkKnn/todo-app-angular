@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import Todo._
 case class Todo(
     id: Option[Id],
-    category_id: Category.Id,
+    categoryId: Category.Id,
     title: String,
     body: String,
     state: Int,
@@ -24,5 +24,21 @@ object Todo {
     new Entity.WithNoId(new Todo(
       None, categoryId, title, body, state
     ))
+  }
+
+  type CategoryRef = Map[Todo.Id, Category]
+  def createCategoryRef(todo: Seq[Todo.EmbeddedId], categories: Seq[Category.EmbeddedId]): CategoryRef = {
+    val categoryIdMap: Map[Category.Id, Category.EmbeddedId] = (for {
+      category <- categories
+    } yield {
+      category.id -> category
+    }).toMap
+
+    val categoryMap: Map[Todo.Id, Category] = (for {
+      value <- todo
+      category <- categoryIdMap.get(value.v.categoryId)
+    } yield (value.id -> category.v)).toMap
+
+    categoryMap
   }
 }

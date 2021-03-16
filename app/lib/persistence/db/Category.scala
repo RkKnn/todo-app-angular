@@ -23,13 +23,15 @@ case class CategoryTable[P <: JdbcProfile]()(implicit val driver: P) extends Tab
     def name = column[String]("name", O.Utf8Char255)
     def slug = column[String]("slug", O.AsciiChar64)
     def color = column[Int]("color", O.UInt8)
+    def updatedAt = column[LocalDateTime]("updated_at", O.TsCurrent)
+    def createdAt = column[LocalDateTime]("created_at", O.Ts)
 
-    type TableElementTuple = (Option[Id], String, String, Int)
+    type TableElementTuple = (Option[Id], String, String, Int, LocalDateTime, LocalDateTime)
 
-    def * = (id.?, name, slug, color) <> (
-      (t: TableElementTuple) => Category(t._1, t._2, t._3, t._4),
+    def * = (id.?, name, slug, color, updatedAt, createdAt) <> (
+      (t: TableElementTuple) => Category(t._1, t._2, t._3, t._4, t._5, t._6),
       (v: TableElementType) => Category.unapply(v).map { t => (
-        t._1, t._2, t._3, t._4
+        t._1, t._2, t._3, t._4, t._5, t._6
       )}
     )
   }

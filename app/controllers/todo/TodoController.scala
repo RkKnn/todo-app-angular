@@ -21,6 +21,7 @@ import play.api.i18n._
 import ixias.model.Entity
 import lib.persistence.db.StateType
 import lib.model.Category
+import lib.persistence.CategoryRepository
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -32,9 +33,13 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
     def listPage() = Action.async { implicit request => 
         for {
-            value <- TodoRepository().getAll
+            todo <- TodoRepository().getAll
+            category <- CategoryRepository().getAll
         } yield {
-            val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+            val todo_list_vv = ViewValueList(
+                vv,
+                RegisterFormData.registerForm, SelectIdFormData.selectIdForm,
+                todo.map(_.v), Todo.createCategoryRef(todo, category))
             Ok(views.html.todo.List(todo_list_vv))
         }
         // TodoRepository().getAll.map { value => 
@@ -45,9 +50,13 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
 
     def trushPage() = Action.async { implicit request => 
         for {
-            value <- TodoRepository().getAll
+            todo <- TodoRepository().getAll
+            category <- CategoryRepository().getAll
         } yield {
-            val todo_list_vv = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+            val todo_list_vv = ViewValueList(
+                vv.copy(title = "ゴミ箱"),
+                RegisterFormData.registerForm, SelectIdFormData.selectIdForm,
+                todo.map(_.v), Todo.createCategoryRef(todo, category))
             Ok(views.html.todo.Trush(todo_list_vv))
         }
         // TodoRepository().getAll.map { value => 
@@ -60,9 +69,13 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         RegisterFormData.registerForm.bindFromRequest().fold (
             (formWithErrors: Form[RegisterFormData]) => {
                 for {
-                    value <- TodoRepository().getAll
+                    todo <- TodoRepository().getAll
+                    category <- CategoryRepository().getAll
                 } yield { 
-                    val todo_list_vv = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
+                    val todo_list_vv = ViewValueList(
+                        vv,
+                        formWithErrors, SelectIdFormData.selectIdForm,
+                        todo.map(_.v), Todo.createCategoryRef(todo, category))
                     // Ok(views.html.todo.List(todo_list_vv))
                     BadRequest(views.html.todo.List(todo_list_vv))
                 }

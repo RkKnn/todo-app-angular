@@ -17,7 +17,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
     jsSrc  = Seq("main.js")
   )
 
-  def list_page() = Action.async { implicit req =>
+  def listPage() = Action.async { implicit req =>
     CategoryRepository().getAll.map { value =>
       Ok(views.html.todo.CategoryList(ViewValueCategoryList(vv, value.map(_.v))))
     }
