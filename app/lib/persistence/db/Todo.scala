@@ -44,6 +44,6 @@ sealed trait StateType {
 
 object StateType {
   object Active extends StateType { val state = 0 }
-  object Done extends StateType { val state = 1 }
-  object Archive extends StateType { val state = 2 }
+  object InProgress extends StateType { val state = 1 }
+  object Done extends StateType { val state = 2 }
 }
