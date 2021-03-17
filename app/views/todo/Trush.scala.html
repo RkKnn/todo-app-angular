@@ -10,7 +10,7 @@
         @for(todo <- vv.todoList) {
             <label for="trush_id_@todo.id">
                 <input class="todo-list__trush-checkbox" type="checkbox" id="trush_id_@todo.id" name="ids[]" value=@todo.id>
-                @defining(Map(0 -> "active", 1 -> "done", 2 -> "open-archive")) { convert =>
+                @defining(Map(0 -> "active", 1 -> "inProgress", 2 -> "open-done")) { convert =>
                     <li class="todo-list__item todo-list__item_@convert(todo.state)">
                 }
                     <h2>@todo.title</h2>
@@ -19,7 +19,7 @@
             </label>
         }
 
-        <input type="submit" value="アーカイブ">
+        <input type="submit" value="done">
         <input type="submit" value="todoに戻す" formaction="@controllers.todo.routes.TodoController.unarchive()">
         <input type="submit" value="削除" formaction="@controllers.todo.routes.TodoController.delete()">
     }
