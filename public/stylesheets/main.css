@@ -69,21 +69,22 @@ body {
   background-color: greenyellow;
 }
 
-.todo-list .todo-list__item_done {
+.todo-list .todo-list__item_inProgress {
   background-color: greenyellow;
 }
 
-.todo-list .todo-list__checkbox:checked + .todo-list__item_done {
+.todo-list .todo-list__checkbox:checked + .todo-list__item_inProgress {
   border: solid red;
   background-color: azure;
 }
 
-.todo-list .todo-list__item_archive {
+.todo-list .todo-list__item_done {
   display: none;
+  background-color: salmon;
 }
 
-.todo-list .todo-list__item_open-archive {
-  background-color: salmon;
+.todo-list .todo-list__item_open {
+  display: block;
 }
 
 
