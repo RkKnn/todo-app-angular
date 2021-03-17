@@ -17,6 +17,11 @@
                 }
                     <h2>@todo.title</h2>
                     <p>@todo.body</p>
+
+                    @vv.category.get(todo) match {
+                        case Some(category) => {<span>#@category.name</span>}
+                        case None => {<span>no category</span>}
+                    }
                 </li>
             </label>
         }
