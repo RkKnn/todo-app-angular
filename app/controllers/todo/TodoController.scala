@@ -33,12 +33,12 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         for {
             value <- TodoRepository().getAll
         } yield {
-            val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
-            Ok(views.html.todo.List(todo_list_vv))
+            val todoListVV = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+            Ok(views.html.todo.List(todoListVV))
         }
         // TodoRepository().getAll.map { value => 
-        //     val todo_list_vv = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
-        //     Ok(views.html.todo.List(todo_list_vv))
+        //     val todoListVV = ViewValueList(vv, RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+        //     Ok(views.html.todo.List(todoListVV))
         // }
     }
 
@@ -46,12 +46,12 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         for {
             value <- TodoRepository().getAll
         } yield {
-            val todo_list_vv = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
-            Ok(views.html.todo.Trush(todo_list_vv))
+            val todoListVV = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+            Ok(views.html.todo.Trush(todoListVV))
         }
         // TodoRepository().getAll.map { value => 
-        //     val todo_list_vv = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
-        //     Ok(views.html.todo.Trush(todo_list_vv))
+        //     val todoListVV = ViewValueList(vv.copy(title = "ゴミ箱"), RegisterFormData.registerForm, SelectIdFormData.selectIdForm, value.map(_.v))
+        //     Ok(views.html.todo.Trush(todoListVV))
         // }
     }
 
@@ -61,14 +61,14 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
                 for {
                     value <- TodoRepository().getAll
                 } yield { 
-                    val todo_list_vv = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
-                    // Ok(views.html.todo.List(todo_list_vv))
-                    BadRequest(views.html.todo.List(todo_list_vv))
+                    val todoListVV = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
+                    // Ok(views.html.todo.List(todoListVV))
+                    BadRequest(views.html.todo.List(todoListVV))
                 }
                 // TodoRepository().getAll.map { value => 
-                //     val todo_list_vv = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
-                //     // Ok(views.html.todo.List(todo_list_vv))
-                //     BadRequest(views.html.todo.List(todo_list_vv))
+                //     val todoListVV = ViewValueList(vv, formWithErrors, SelectIdFormData.selectIdForm, value.map(_.v))
+                //     // Ok(views.html.todo.List(todoListVV))
+                //     BadRequest(views.html.todo.List(todoListVV))
                 // }
             },
             (formData: RegisterFormData) => {
