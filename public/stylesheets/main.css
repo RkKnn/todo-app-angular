@@ -80,10 +80,11 @@ body {
 
 .todo-list .todo-list__item_done {
   display: none;
+  background-color: salmon;
 }
 
-.todo-list .todo-list__item_open-done {
-  background-color: salmon;
+.todo-list .todo-list__item_open {
+  display: block;
 }
 
 

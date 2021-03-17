@@ -72,7 +72,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
                 // }
             },
             (formData: RegisterFormData) => {
-                val todo = Todo(0, formData.title, formData.body, 0)
+                val todo = Todo(0, formData.title, formData.body, StateType.Active)
                 for {
                     _ <- TodoRepository().add(todo)
                 } yield {
