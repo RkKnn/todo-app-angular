@@ -12,14 +12,17 @@
                 <label for="select_id_@todo.id">
                     <input class="todo-list__checkbox" type="checkbox" id="select_id_@todo.id" name="ids[]" value=@todo.id>
                         <li class="todo-list__item todo-list__item_@todo.state">
-                        <h2>@todo.title</h2>
-                        <p>@todo.body</p>
-
-                        @vv.category.get(todo) match {
-                            case Some(category) => {<span>#@category.name</span>}
-                            case None => {<span>no category</span>}
-                        }
-                    </li>
+                            <h2>@todo.title</h2>
+                            <p>@todo.body</p>
+                            @vv.category.get(todo) match {
+                                case Some(category) => {
+                                        <span class="todo-list__category" style="background-color: @lib.persistence.db.Color.convert(category.color)">#@category.name</span>
+                                }
+                                case None => {
+                                        <span class="todo-list__category">no category</span>
+                                }
+                            }
+                        </li>
                 </label>
             }
         </ul>
