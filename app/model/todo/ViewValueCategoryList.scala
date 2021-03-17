@@ -9,6 +9,7 @@ import model.ViewValueCommon
 // Topページのviewvalue
 case class ViewValueCategoryList(
   common: ViewValueCommon,
+  registerForm: Form[controllers.todo.CategoryRegisterFormData],
   categoryList: Seq[lib.model.Category]
 ) extends HasCommon
 

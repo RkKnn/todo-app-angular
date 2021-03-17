@@ -1,11 +1,24 @@
-@(vv: model.todo.ViewValueCategoryList)
+@(vv: model.todo.ViewValueCategoryList)(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
 
 <a href="@controllers.routes.HomeController.index()"></a>
 
-@for(category <- vv.categoryList) {
-  <h2>@category.name</h2>
-  <p>@category.slug</p>
-}
+<ul>
+  @helper.form(action = controllers.todo.routes.CategoryController.register()) {
+    @helper.CSRF.formField
 
+    @helper.inputText(vv.registerForm("name"))
+    @helper.inputText(vv.registerForm("slug"))
+    @helper.inputText(vv.registerForm("color"))
+
+    <input type="submit" value="追加">
+
+    @for(category <- vv.categoryList) {
+      <li>
+        <h2>@category.name</h2>
+        <p>@category.slug</p>
+      </li>
+    }
+  }
+</ul>
 }
