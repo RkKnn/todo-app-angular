@@ -85,6 +85,22 @@ body {
 
 .todo-list .todo-list__item_open {
   display: block;
+  width: 100%;
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0px;
+  list-style-type: none;
+  border: solid;
+}
+
+.category-list .category-list__item {
+  box-sizing: border-box;
+  padding: 5px;
+  margin: 1%;
+  width: 23%;
 }
 
 
