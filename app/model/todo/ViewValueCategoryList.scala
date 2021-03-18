@@ -10,6 +10,7 @@ import model.ViewValueCommon
 case class ViewValueCategoryList(
   common: ViewValueCommon,
   registerForm: Form[controllers.todo.CategoryRegisterFormData],
+  selectIdForm: Form[controllers.todo.SelectIdFormData],
   categoryList: Seq[lib.model.Category]
 ) extends HasCommon
 
