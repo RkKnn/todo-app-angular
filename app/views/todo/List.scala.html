@@ -13,7 +13,9 @@
                     <input class="todo-list__checkbox" type="checkbox" id="select_id_@todo.id" name="ids[]" value=@todo.id>
                         <li class="todo-list__item todo-list__item_@todo.state">
                             <h2>@todo.title</h2>
-                            <p>@todo.body</p>
+                            <p>
+                                <pre>@todo.body</pre>
+                            </p>
                             @vv.category.get(todo) match {
                                 case Some(category) => {
                                     @lib.persistence.db.Color.convert(category.color)
