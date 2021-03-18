@@ -131,11 +131,33 @@ body {
   border: solid;
 }
 
-.category-list .category-list__item {
+.category-list .category-list__checkbox {
+  display: none;
+}
+
+.category-list .category-list__checkbox:checked + .category-list__label {
+  opacity: 0.4;
+  box-shadow: none;
+}
+
+.category-list .category-list__label {
   box-sizing: border-box;
-  padding: 5px;
+  box-shadow: 0 0 4px gray;
   margin: 1%;
   width: 23%;
+}
+
+.category-list .category-list__item {
+  padding: 20px;
+  word-break: break-all;
+}
+
+.category-list .category-list__title {
+  margin: 0;
+}
+
+.category-list .category-list__name {
+  margin: 0;
 }
 
 

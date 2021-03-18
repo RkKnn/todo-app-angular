@@ -7,6 +7,7 @@ import play.api.i18n._
 
 import lib.persistence.onMySQL.driver
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import model.ViewValueHome
 import lib.persistence.CategoryRepository
 import model.todo.ViewValueCategoryList
@@ -26,7 +27,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
     } yield {
       val categoryListVV = ViewValueCategoryList(
         vv,
-        CategoryRegisterFormData.form,
+        CategoryRegisterFormData.form, SelectIdFormData.selectIdForm,
         value.map(_.v))
       Ok(views.html.todo.CategoryList(categoryListVV))
     }
@@ -45,7 +46,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
         } yield { 
           val categoryListVV = ViewValueCategoryList(
             vv,
-            formWithErrors,
+            formWithErrors, SelectIdFormData.selectIdForm,
             value.map(_.v))
           BadRequest(views.html.todo.CategoryList(categoryListVV))
         }
@@ -54,6 +55,21 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
         val category = Category(formData.name, formData.slug, formData.color)
         for {
           _ <- CategoryRepository().add(category)
+        } yield {
+          Redirect(controllers.todo.routes.CategoryController.listPage())
+        }
+      }
+    )
+  }
+
+  def delete() = Action.async { implicit req =>
+    SelectIdFormData.selectIdForm.bindFromRequest().fold (
+      (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.CategoryController.listPage())),
+      (formData: SelectIdFormData) => {
+        for {
+          _ <- {
+            CategoryRepository().removeAll(formData.ids.map(Category.Id(_)))
+          }
         } yield {
           Redirect(controllers.todo.routes.CategoryController.listPage())
         }

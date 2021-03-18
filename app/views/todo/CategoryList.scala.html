@@ -11,15 +11,23 @@
   @helper.inputText(vv.registerForm("color"))
 
   <input type="submit" value="追加">
+}
+
+@helper.form(action = controllers.todo.routes.CategoryController.delete()) {
+  @helper.CSRF.formField
 
   <ul class="category-list">
     @for(category <- vv.categoryList) {
-      <li class="category-list__item" style="background-color: @lib.persistence.db.Color.convert(category.color)">
-        <h2 class="category-list__title">@category.name</h2>
-        <p class="category-list__name">@category.slug</p>
-      </li>
+      <input class="category-list__checkbox" type="checkbox" id="select_id_@category.id" name="ids[]" value=@category.id>
+      <label for="select_id_@category.id" class="category-list__label" style="background-color: @lib.persistence.db.Color.convert(category.color)">
+        <li class="category-list__item">
+          <h2 class="category-list__title">@category.name</h2>
+          <p class="category-list__name">@category.slug</p>
+        </li>
+      </label>
     }
   </ul>
+  <input type="submit" value="削除">
 }
 
 }
