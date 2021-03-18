@@ -19,7 +19,6 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.i18n._
 import ixias.model.Entity
-import lib.persistence.db.StateType
 import lib.model.Category
 import lib.persistence.CategoryRepository
 
@@ -86,7 +85,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
                 // }
             },
             (formData: RegisterFormData) => {
-                val todo = Todo(Category.Id(0), formData.title, formData.body, StateType.Active)
+                val todo = Todo(Category.Id(0), formData.title, formData.body, Todo.StateType.ACTIVE)
                 TodoRepository().add(todo).map { _ =>
                     Redirect(controllers.todo.routes.TodoController.listPage())
                 }

@@ -6,7 +6,6 @@ import lib.model.Todo
 import slick.jdbc.JdbcProfile
 import ixias.model.{Entity, IdStatus}
 import shapeless.tag
-import lib.persistence.db.StateType
 import java.time.LocalDateTime
 
 case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
@@ -36,7 +35,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
         slick
         .filter(_.id.inSetBind(ids))
         .map(_.state)
-        .update(StateType.Done.state)
+        .update(Todo.StateType.DONE)
       }
 
     def unarchiveAll(ids: Seq[Id]): Future[Int] =
@@ -44,7 +43,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
         slick
         .filter(_.id.inSetBind(ids))
         .map(_.state)
-        .update(StateType.Active.state)
+        .update(Todo.StateType.ACTIVE)
       }
     
     def toggleStateAll(ids: Seq[Id]): Future[_] =
@@ -58,17 +57,17 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
           grouped = old.groupBy(_._2)
             .transform((key, values) => values.map(value => Todo.Id(value._1)))
 
-          activeIds = grouped.getOrElse(StateType.Active.state, Seq.empty)
+          activeIds = grouped.getOrElse(Todo.StateType.ACTIVE, Seq.empty)
           _ <- slick
             .filter(_.id.inSetBind(activeIds))
             .map(_.state)
-            .update(StateType.InProgress.state)
+            .update(Todo.StateType.IN_PROGRESS)
 
-          inProgressIds = grouped.getOrElse(StateType.InProgress.state, Seq.empty)
+          inProgressIds = grouped.getOrElse(Todo.StateType.IN_PROGRESS, Seq.empty)
           _ <- slick
             .filter(_.id.inSetBind(inProgressIds))
             .map(_.state)
-            .update(StateType.Active.state)
+            .update(Todo.StateType.ACTIVE)
         } yield old
       }
     
