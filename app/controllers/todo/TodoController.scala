@@ -85,7 +85,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
                 // }
             },
             (formData: RegisterFormData) => {
-                val todo = Todo(Category.Id(0), formData.title, formData.body, Todo.StateT.ACTIVE)
+                val todo = Todo(Category.Id(0), formData.title, formData.body, Todo.StateType.ACTIVE)
                 TodoRepository().add(todo).map { _ =>
                     Redirect(controllers.todo.routes.TodoController.listPage())
                 }
