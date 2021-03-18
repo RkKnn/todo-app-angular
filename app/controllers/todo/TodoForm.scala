@@ -3,12 +3,13 @@ import play.api.data.Forms._
 import play.api.data._
 import play.api.data.validation.Constraints
 
-case class RegisterFormData(title: String, body: String)
+case class RegisterFormData(title: String, body: String, category: Int)
 object RegisterFormData {
   val registerForm = Form(
     mapping(
       "title" -> nonEmptyText(maxLength = 255),
-      "body" -> nonEmptyText()
+      "body" -> nonEmptyText(),
+      "category" -> number()
     )(RegisterFormData.apply)(RegisterFormData.unapply)
   )
 }

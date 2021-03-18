@@ -1,10 +1,13 @@
 @import controllers.todo.RegisterFormData
-@(form: Form[RegisterFormData])(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
+@import lib.model.Category
+
+@(form: Form[RegisterFormData], categories: Seq[Category])(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
 
 @helper.form(action = controllers.todo.routes.TodoController.register()) {
   @helper.CSRF.formField
   @helper.inputText(form("title"))
   @helper.textarea(form("body"))
+  @helper.select(form("category"), options = categories.map(category => (category.id.getOrElse(0).toString(), category.name)))
 
   <input type="submit" value="追加">
 }

@@ -2,7 +2,7 @@
 @common.Default(vv){
     <a href="@controllers.todo.routes.TodoController.trushPage()">ゴミ箱へ</a>
 
-    @UpdateForm(vv.registerForm)
+    @UpdateForm(vv.registerForm, vv.category.values.toSeq)
 
     @helper.form(action = controllers.todo.routes.TodoController.update()) {
         @helper.CSRF.formField
