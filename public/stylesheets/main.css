@@ -91,7 +91,7 @@ body {
   display: none;
 }
 
-.todo-list .todo-list__item_active {
+.todo-list .todo-list__item_ACTIVE {
   background-color: skyblue;
 }
 
@@ -99,21 +99,21 @@ body {
   border: solid red;
 }
 
-.todo-list .todo-list__checkbox:checked + .todo-list__item_active {
+.todo-list .todo-list__checkbox:checked + .todo-list__item_ACTIVE {
   border: solid red;
   background-color: greenyellow;
 }
 
-.todo-list .todo-list__item_inProgress {
+.todo-list .todo-list__item_IN_PROGRESS {
   background-color: greenyellow;
 }
 
-.todo-list .todo-list__checkbox:checked + .todo-list__item_inProgress {
+.todo-list .todo-list__checkbox:checked + .todo-list__item_IN_PROGRESS {
   border: solid red;
   background-color: skyblue;
 }
 
-.todo-list .todo-list__item_done {
+.todo-list .todo-list__item_DONE {
   display: none;
   background-color: salmon;
 }

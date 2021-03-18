@@ -5,12 +5,13 @@ import java.time.LocalDateTime
 
 import Todo._
 import lib.persistence.db.StateType
+import ixias.util.EnumStatus
 case class Todo(
     id: Option[Id],
     categoryId: Category.Id,
     title: String,
     body: String,
-    state: StateType,
+    state: StateT,
     updatedAt: LocalDateTime = NOW,
     createdAt: LocalDateTime = NOW
 ) extends EntityModel[Id]
@@ -21,10 +22,19 @@ object Todo {
   type WithNoId = Entity.WithNoId[Id, Todo]
   type EmbeddedId = Entity.EmbeddedId[Id, Todo]
 
-  def apply(categoryId: Category.Id, title: String, body: String, state: StateType): WithNoId = {
+  def apply(categoryId: Category.Id, title: String, body: String, state: StateT): WithNoId = {
     new Entity.WithNoId(new Todo(
       None, categoryId, title, body, state
     ))
+  }
+
+  // ステータス定義
+  //~~~~~~~~~~~~~~~~~
+  sealed abstract class StateT(val code: Short, val state: Int) extends EnumStatus
+  object StateT extends EnumStatus.Of[StateT] {
+    case object ACTIVE      extends StateT(code = 0, state = 0)
+    case object IN_PROGRESS extends StateT(code = 1, state = 1)
+    case object DONE        extends StateT(code = 2, state = 2)
   }
 
   type CategoryRef = Map[Todo, Category]

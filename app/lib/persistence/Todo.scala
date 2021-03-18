@@ -36,7 +36,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
         slick
         .filter(_.id.inSetBind(ids))
         .map(_.state)
-        .update(StateType.Done.state)
+        .update(Todo.StateT.DONE)
       }
 
     def unarchiveAll(ids: Seq[Id]): Future[Int] =
@@ -44,7 +44,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
         slick
         .filter(_.id.inSetBind(ids))
         .map(_.state)
-        .update(StateType.Active.state)
+        .update(Todo.StateT.ACTIVE)
       }
     
     def toggleStateAll(ids: Seq[Id]): Future[_] =
@@ -58,17 +58,17 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
           grouped = old.groupBy(_._2)
             .transform((key, values) => values.map(value => Todo.Id(value._1)))
 
-          activeIds = grouped.getOrElse(StateType.Active.state, Seq.empty)
+          activeIds = grouped.getOrElse(Todo.StateT.ACTIVE, Seq.empty)
           _ <- slick
             .filter(_.id.inSetBind(activeIds))
             .map(_.state)
-            .update(StateType.InProgress.state)
+            .update(Todo.StateT.IN_PROGRESS)
 
-          inProgressIds = grouped.getOrElse(StateType.InProgress.state, Seq.empty)
+          inProgressIds = grouped.getOrElse(Todo.StateT.IN_PROGRESS, Seq.empty)
           _ <- slick
             .filter(_.id.inSetBind(inProgressIds))
             .map(_.state)
-            .update(StateType.Active.state)
+            .update(Todo.StateT.ACTIVE)
         } yield old
       }
     
