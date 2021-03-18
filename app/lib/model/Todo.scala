@@ -4,7 +4,6 @@ import ixias.model._
 import java.time.LocalDateTime
 
 import Todo._
-import lib.persistence.db.StateType
 import ixias.util.EnumStatus
 case class Todo(
     id: Option[Id],

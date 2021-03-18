@@ -6,7 +6,6 @@ import lib.model.Todo
 import slick.jdbc.JdbcProfile
 import ixias.model.{Entity, IdStatus}
 import shapeless.tag
-import lib.persistence.db.StateType
 import java.time.LocalDateTime
 
 case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)

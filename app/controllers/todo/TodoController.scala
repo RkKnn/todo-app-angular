@@ -19,7 +19,6 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.i18n._
 import ixias.model.Entity
-import lib.persistence.db.StateType
 import lib.model.Category
 import lib.persistence.CategoryRepository
 

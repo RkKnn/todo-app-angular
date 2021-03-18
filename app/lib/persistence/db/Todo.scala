@@ -38,21 +38,3 @@ case class TodoTable[P <: JdbcProfile]()(implicit val driver: P) extends Table[T
     )
   }
 }
-
-sealed abstract class StateType(val state: Int, name: String) {
-  override def toString(): String = name
-}
-
-object StateType {
-  object Active extends StateType(0, "active")
-  object InProgress extends StateType(1, "inProgress")
-  object Done extends StateType(2, "done")
-
-  def toStateType(state: Int): StateType = {
-    state match {
-      case 0 => Active
-      case 1 => InProgress
-      case 2 => Done
-    }
-  }
-}
