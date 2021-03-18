@@ -16,10 +16,11 @@
                             <p>@todo.body</p>
                             @vv.category.get(todo) match {
                                 case Some(category) => {
-                                        <span class="todo-list__category" style="background-color: @lib.persistence.db.Color.convert(category.color)">#@category.name</span>
+                                    @lib.persistence.db.Color.convert(category.color)
+                                    <span class="todo-list__category" style="background-color: red">#@category.name</span>
                                 }
                                 case None => {
-                                        <span class="todo-list__category">no category</span>
+                                    <span class="todo-list__category">no category</span>
                                 }
                             }
                         </li>
