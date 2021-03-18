@@ -19,7 +19,14 @@
     @* And here's where we render the `Html` object containing
     * the page content. *@
     <header class="header">
-      <div class="header__content"><span class="header__logo">To-do Sample</span></div>
+      <div class="header__content">
+        <span class="header__logo">To-do Sample</span>
+        <ul class="header__list">
+          <li class="header__item"><a class="header__link" href="@controllers.routes.HomeController.index()">top</a></li>
+          <li class="header__item"><a class="header__link" href="@controllers.todo.routes.TodoController.listPage()">todo</a></li>
+          <li class="header__item"><a class="header__link" href="@controllers.todo.routes.CategoryController.listPage()">category</a></li>
+        </ul>
+      </div>
     </header>
     <main class="main">
       <h1>@vv.title</h1>

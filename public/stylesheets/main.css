@@ -14,7 +14,8 @@ body {
 }
 
 .header .header__content {
-  width:      1080px;
+  position: relative;
+  width:      100vw;
   margin:     auto;
 }
 
@@ -23,10 +24,36 @@ body {
   line-height:       70px;
   font-size:         20px;
   font-weight:       bold;
+  padding:           20px;
+}
+
+.header .header__list {
+  position: absolute;
+  right: 0px;
+  display: inline-block;
+  margin: auto 0;
+}
+
+.header .header__item {
+  display: inline;
+  padding-left: 20px;
+  list-style-type: none;
+  font-size: large;
+}
+
+.header .header__link {
+  text-decoration: none;
+  color: red;
+}
+
+.header .header__link:hover {
+  border-bottom: solid;
+  border-color: white;
 }
 
 .main {
-  width:      980px;
+  width:      90%;
+  box-sizing: border-box;
   margin:     100px auto;
   padding:    100px;
   box-shadow: 0 0 4px gray;
