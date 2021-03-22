@@ -36,17 +36,3 @@ case class CategoryTable[P <: JdbcProfile]()(implicit val driver: P) extends Tab
     )
   }
 }
-
-// TODO: 非常に良くないのでテーブルを作るかする
-object Color {
-  def convert(color: Int): String = {
-    color match {
-      // db number => css color
-      case 0 => "#888"
-      case 1 => "#ff0000"
-      case 2 => "#00ff00"
-      case 3 => "#0000ff"
-      case _ => "#aaa"
-    }
-  }
-}
