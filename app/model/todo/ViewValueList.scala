@@ -14,7 +14,7 @@ case class ViewValueList(
   selectIdForm: Form[controllers.todo.SelectIdFormData],
   todoList: Seq[Todo],
   category: Todo.CategoryRef,
-  colorRef: lib.persistence.ColorRepository.ColorRef
+  colorRef: lib.persistence.CategoryRepository.ColorRef
 ) extends HasCommon
 
 

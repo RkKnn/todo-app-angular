@@ -20,7 +20,7 @@ import play.api.data.Forms._
 import play.api.i18n._
 import ixias.model.Entity
 import lib.model.Category
-import lib.persistence.{CategoryRepository, ColorRepository}
+import lib.persistence.CategoryRepository
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -34,7 +34,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         for {
             todo <- TodoRepository().getAll
             category <- CategoryRepository().getAll
-            colorRef <- ColorRepository().createColorRef(category)
+            colorRef <- CategoryRepository().createColorRef(category)
         } yield {
             val todoListVV = ViewValueList(
                 vv,
@@ -52,7 +52,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         for {
             todo <- TodoRepository().getAll
             category <- CategoryRepository().getAll
-            colorRef <- ColorRepository().createColorRef(category)
+            colorRef <- CategoryRepository().createColorRef(category)
         } yield {
             val todoListVV = ViewValueList(
                 vv.copy(title = "ゴミ箱"),
@@ -72,7 +72,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
                 for {
                     todo <- TodoRepository().getAll
                     category <- CategoryRepository().getAll
-                    colorRef <- ColorRepository().createColorRef(category)
+                    colorRef <- CategoryRepository().createColorRef(category)
                 } yield { 
                     val todoListVV = ViewValueList(
                         vv,
