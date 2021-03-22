@@ -2,7 +2,7 @@
 @common.Default(vv){
     <a href="@controllers.todo.routes.TodoController.trushPage()">ゴミ箱へ</a>
 
-    @UpdateForm(vv.registerForm, vv.category.values.toSeq)
+    @UpdateForm(vv.registerForm, vv.category.values.toSeq.map(_.v))
 
     @helper.form(action = controllers.todo.routes.TodoController.update()) {
         @helper.CSRF.formField
@@ -18,8 +18,7 @@
                             </p>
                             @vv.category.get(todo) match {
                                 case Some(category) => {
-                                    @lib.persistence.db.Color.convert(category.color)
-                                    <span class="todo-list__category" style="background-color: red">#@category.name</span>
+                                    <span class="todo-list__category" style="background-color: @lib.model.Color.convert(vv.colorRef.get(category).map(_.v))">#@category.v.name</span>
                                 }
                                 case None => {
                                     <span class="todo-list__category">no category</span>

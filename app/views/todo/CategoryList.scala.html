@@ -19,10 +19,10 @@
   <ul class="category-list">
     @for(category <- vv.categoryList) {
       <input class="category-list__checkbox" type="checkbox" id="select_id_@category.id" name="ids[]" value=@category.id>
-      <label for="select_id_@category.id" class="category-list__label" style="background-color: @lib.persistence.db.Color.convert(category.color)">
+      <label for="select_id_@category.id" class="category-list__label" style="background-color: @lib.model.Color.convert(vv.colorRef.get(category).map(_.v))">
         <li class="category-list__item">
-          <h2 class="category-list__title">@category.name</h2>
-          <p class="category-list__name">@category.slug</p>
+          <h2 class="category-list__title">@category.v.name</h2>
+          <p class="category-list__name">@category.v.slug</p>
         </li>
       </label>
     }

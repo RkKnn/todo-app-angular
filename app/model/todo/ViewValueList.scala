@@ -13,7 +13,8 @@ case class ViewValueList(
   registerForm: Form[controllers.todo.RegisterFormData],
   selectIdForm: Form[controllers.todo.SelectIdFormData],
   todoList: Seq[Todo],
-  category: Todo.CategoryRef
+  category: Todo.CategoryRef,
+  colorRef: lib.persistence.CategoryRepository.ColorRef
 ) extends HasCommon
 
 

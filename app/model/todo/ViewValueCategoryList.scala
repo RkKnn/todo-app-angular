@@ -11,7 +11,8 @@ case class ViewValueCategoryList(
   common: ViewValueCommon,
   registerForm: Form[controllers.todo.CategoryRegisterFormData],
   selectIdForm: Form[controllers.todo.SelectIdFormData],
-  categoryList: Seq[lib.model.Category]
+  categoryList: Seq[lib.model.Category.EmbeddedId],
+  colorRef: lib.persistence.CategoryRepository.ColorRef
 ) extends HasCommon
 
 

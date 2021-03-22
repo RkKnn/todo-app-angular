@@ -36,16 +36,16 @@ object Todo {
     case object DONE        extends StateType(code = 2, state = 2)
   }
 
-  type CategoryRef = Map[Todo, Category]
+  type CategoryRef = Map[Todo, Category.EmbeddedId]
   def createCategoryRef(todo: Seq[Todo.EmbeddedId], categories: Seq[Category.EmbeddedId]): CategoryRef = {
     val categoryIdMap: Map[Category.Id, Category.EmbeddedId] = (for {
       category <- categories
     } yield (category.id -> category)).toMap
 
-    val categoryMap: Map[Todo, Category] = (for {
+    val categoryMap: Map[Todo, Category.EmbeddedId] = (for {
       value <- todo
       category <- categoryIdMap.get(value.v.categoryId)
-    } yield (value.v -> category.v)).toMap
+    } yield (value.v -> category)).toMap
 
     categoryMap
   }

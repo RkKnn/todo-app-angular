@@ -2,10 +2,9 @@ package lib.persistence
 
 import scala.concurrent.Future
 import ixias.persistence.SlickRepository
-import lib.model.Category
+import lib.model.{Category, Color}
 import slick.jdbc.JdbcProfile
 import ixias.model.{Entity, IdStatus}
-import ixias.aws.qldb.dbio
 
 case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[Category.Id, Category, P]
@@ -21,6 +20,27 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
       RunDBAction(CategoryTable, "slave") {
         _.result
       }
+    
+    def createColorRef(categories: Seq[Category.EmbeddedId]): Future[CategoryRepository.ColorRef] = {
+
+      val getColors: Future[Seq[Color.EmbeddedId]] = RunDBAction(ColorTable, "slave") {
+        _.filter(_.id.inSetBind(categories.map(category => Color.Id(category.v.color)))).result
+      }
+
+      for {
+        colors <- getColors
+
+        colorIdMap: Map[Color.Id, Color.EmbeddedId] = colors.map { color =>
+          color.id -> color
+        }.toMap
+
+        colorRef = categories.map { category =>
+          category -> colorIdMap.get(Color.Id(category.v.color))
+        }.toMap.collect {
+          case (key, Some(value)) => key -> value
+        }
+      } yield colorRef
+    }
 
     def add(entity: EntityWithNoId): Future[Id] =
       RunDBAction(CategoryTable) { slick =>
@@ -57,4 +77,8 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
         //     }
         //   } yield old
         // }
+}
+
+object CategoryRepository {
+  type ColorRef = Map[Category.EmbeddedId, Color.EmbeddedId]
 }
