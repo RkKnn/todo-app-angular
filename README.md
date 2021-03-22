@@ -125,3 +125,16 @@ mysql> SELECT * FROM to_do;
 ```
 $ sbt run   // サーバーが起動したらlocalhost:9000にアクセス
 ```
+
+
+# ----- memo ------
+
+```sql
+mysql> CREATE TABLE `color` (
+        `id`         BIGINT(20)   UNSIGNED     NOT NULL AUTO_INCREMENT,
+        `colorcode`  MEDIUMINT UNSIGNED        NOT NULL,
+        `updated_at` TIMESTAMP                 NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        `created_at` TIMESTAMP                 NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```

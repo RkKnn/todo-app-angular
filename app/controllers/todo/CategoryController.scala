@@ -9,7 +9,7 @@ import lib.persistence.onMySQL.driver
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import model.ViewValueHome
-import lib.persistence.CategoryRepository
+import lib.persistence.{CategoryRepository, ColorRepository}
 import model.todo.ViewValueCategoryList
 import lib.model.Category
 
@@ -24,11 +24,12 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
   def listPage() = Action.async { implicit req =>
     for {
       value <- CategoryRepository().getAll
+      colorRef <- ColorRepository().createColorRef(value)
     } yield {
       val categoryListVV = ViewValueCategoryList(
         vv,
         CategoryRegisterFormData.form, SelectIdFormData.selectIdForm,
-        value.map(_.v))
+        value, colorRef)
       Ok(views.html.todo.CategoryList(categoryListVV))
     }
   }
@@ -43,11 +44,12 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
       (formWithErrors: Form[CategoryRegisterFormData]) => {
         for {
           value <- CategoryRepository().getAll
+          colorRef <- ColorRepository().createColorRef(value)
         } yield { 
           val categoryListVV = ViewValueCategoryList(
             vv,
             formWithErrors, SelectIdFormData.selectIdForm,
-            value.map(_.v))
+            value, colorRef)
           BadRequest(views.html.todo.CategoryList(categoryListVV))
         }
       },

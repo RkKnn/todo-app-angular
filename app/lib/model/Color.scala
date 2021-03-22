@@ -31,5 +31,8 @@ object Color {
     ))
   }
 
-  def convert(color: Color): String = s"#${color.colorcode.toHexString}"
+  def convert(color: Option[Color]): String = {
+    // none or 6桁の16進数に変換
+    color.fold("none")(value => s"#${"%06X".format(value.colorcode)}")
+  }
 }

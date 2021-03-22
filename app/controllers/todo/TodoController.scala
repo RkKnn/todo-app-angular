@@ -20,7 +20,7 @@ import play.api.data.Forms._
 import play.api.i18n._
 import ixias.model.Entity
 import lib.model.Category
-import lib.persistence.CategoryRepository
+import lib.persistence.{CategoryRepository, ColorRepository}
 
 @Singleton
 class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -34,11 +34,12 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         for {
             todo <- TodoRepository().getAll
             category <- CategoryRepository().getAll
+            colorRef <- ColorRepository().createColorRef(category)
         } yield {
             val todoListVV = ViewValueList(
                 vv,
                 RegisterFormData.registerForm, SelectIdFormData.selectIdForm,
-                todo.map(_.v), Todo.createCategoryRef(todo, category))
+                todo.map(_.v), Todo.createCategoryRef(todo, category), colorRef)
             Ok(views.html.todo.List(todoListVV))
         }
         // TodoRepository().getAll.map { value => 
@@ -51,11 +52,12 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         for {
             todo <- TodoRepository().getAll
             category <- CategoryRepository().getAll
+            colorRef <- ColorRepository().createColorRef(category)
         } yield {
             val todoListVV = ViewValueList(
                 vv.copy(title = "ゴミ箱"),
                 RegisterFormData.registerForm, SelectIdFormData.selectIdForm,
-                todo.map(_.v), Todo.createCategoryRef(todo, category))
+                todo.map(_.v), Todo.createCategoryRef(todo, category), colorRef)
             Ok(views.html.todo.Trush(todoListVV))
         }
         // TodoRepository().getAll.map { value => 
@@ -70,11 +72,12 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
                 for {
                     todo <- TodoRepository().getAll
                     category <- CategoryRepository().getAll
+                    colorRef <- ColorRepository().createColorRef(category)
                 } yield { 
                     val todoListVV = ViewValueList(
                         vv,
                         formWithErrors, SelectIdFormData.selectIdForm,
-                        todo.map(_.v), Todo.createCategoryRef(todo, category))
+                        todo.map(_.v), Todo.createCategoryRef(todo, category), colorRef)
                     // Ok(views.html.todo.List(todoListVV))
                     BadRequest(views.html.todo.List(todoListVV))
                 }

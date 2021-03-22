@@ -5,7 +5,6 @@ import ixias.persistence.SlickRepository
 import lib.model.Category
 import slick.jdbc.JdbcProfile
 import ixias.model.{Entity, IdStatus}
-import ixias.aws.qldb.dbio
 
 case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[Category.Id, Category, P]

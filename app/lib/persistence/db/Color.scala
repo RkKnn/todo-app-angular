@@ -21,7 +21,7 @@ case class ColorTable[P <: JdbcProfile]()(implicit val driver: P) extends Table[
 
 
     def id = column[Id]("id", O.UInt64, O.PrimaryKey, O.AutoInc)
-    def colorcode = column[Int]("name", O.UInt32)
+    def colorcode = column[Int]("colorcode", O.UInt32)
     def updatedAt = column[LocalDateTime]("updated_at", O.TsCurrent)
     def createdAt = column[LocalDateTime]("created_at", O.Ts)
 
