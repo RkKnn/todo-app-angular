@@ -17,27 +17,6 @@ case class ColorRepository[P <: JdbcProfile]()(implicit val driver: P)
         .filter(_.id === id)
         .result.headOption
       }
-    
-    def createColorRef(categories: Seq[Category.EmbeddedId]): Future[ColorRepository.ColorRef] = {
-
-      val getColors: Future[Seq[Color.EmbeddedId]] = RunDBAction(ColorTable, "slave") {
-        _.filter(_.id.inSetBind(categories.map(category => Color.Id(category.v.color)))).result
-      }
-
-      for {
-        colors <- getColors
-
-        colorIdMap: Map[Color.Id, Color.EmbeddedId] = colors.map { color =>
-          color.id -> color
-        }.toMap
-
-        colorRef = categories.map { category =>
-          category -> colorIdMap.get(Color.Id(category.v.color))
-        }.toMap.collect {
-          case (key, Some(value)) => key -> value
-        }
-      } yield colorRef
-    }
 
     def add(entity: EntityWithNoId): Future[Id] =
       RunDBAction(ColorTable) { slick =>
