@@ -12,6 +12,12 @@ case class ColorRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[Color.Id, Color, P]
   with db.SlickResourceProvider[P] {
     import api._
+
+    def getAll: Future[Seq[EntityEmbeddedId]] =
+      RunDBAction(ColorTable, "slave") {
+        _.result
+      }
+
     def get(id: Id): Future[Option[EntityEmbeddedId]] =
       RunDBAction(ColorTable, "slave") { _
         .filter(_.id === id)

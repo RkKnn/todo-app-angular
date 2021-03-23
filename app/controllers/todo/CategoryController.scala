@@ -9,9 +9,9 @@ import lib.persistence.onMySQL.driver
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import model.ViewValueHome
-import lib.persistence.CategoryRepository
+import lib.persistence.{CategoryRepository, ColorRepository}
 import model.todo.ViewValueCategoryList
-import lib.model.Category
+import lib.model.{Category, Color}
 
 @Singleton
 class CategoryController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with I18nSupport {
@@ -25,31 +25,56 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
     for {
       value <- CategoryRepository().getAll
       colorRef <- CategoryRepository().createColorRef(value)
+      colorList <- ColorRepository().getAll
     } yield {
       val categoryListVV = ViewValueCategoryList(
         vv,
-        CategoryRegisterFormData.form, SelectIdFormData.selectIdForm,
-        value, colorRef)
+        CategoryRegisterFormData.form, SelectIdFormData.selectIdForm, ColorRegisterFormData.form,
+        value, colorRef, colorList)
       Ok(views.html.todo.CategoryList(categoryListVV))
     }
   }
 
+  def colorRegister() = Action.async { implicit req =>
+    ColorRegisterFormData.form.bindFromRequest().fold (
+      (formWithErrors: Form[ColorRegisterFormData]) => {
+        for {
+          value <- CategoryRepository().getAll
+          colorRef <- CategoryRepository().createColorRef(value)
+          colorList <- ColorRepository().getAll
+        } yield { 
+          println("error")
+          println(formWithErrors)
+          val categoryListVV = ViewValueCategoryList(
+            vv,
+            CategoryRegisterFormData.form, SelectIdFormData.selectIdForm, formWithErrors,
+            value, colorRef, colorList)
+          BadRequest(views.html.todo.CategoryList(categoryListVV))
+        }
+      },
+      (formData: ColorRegisterFormData) => {
+        val color = Color(formData.colorcode)
+        for {
+          _ <- ColorRepository().add(color)
+        } yield {
+          Redirect(controllers.todo.routes.CategoryController.listPage())
+        }
+      }
+    )
+  }
+
   def register() = Action.async { implicit req =>
-    // for {
-    //   value <- CategoryRepository().getAll
-    // } yield {
-    //   Redirect(controllers.todo.routes.CategoryController.listPage())
-    // }
     CategoryRegisterFormData.form.bindFromRequest().fold (
       (formWithErrors: Form[CategoryRegisterFormData]) => {
         for {
           value <- CategoryRepository().getAll
           colorRef <- CategoryRepository().createColorRef(value)
+          colorList <- ColorRepository().getAll
         } yield { 
           val categoryListVV = ViewValueCategoryList(
             vv,
-            formWithErrors, SelectIdFormData.selectIdForm,
-            value, colorRef)
+            formWithErrors, SelectIdFormData.selectIdForm, ColorRegisterFormData.form,
+            value, colorRef, colorList)
           BadRequest(views.html.todo.CategoryList(categoryListVV))
         }
       },

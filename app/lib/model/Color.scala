@@ -32,7 +32,11 @@ object Color {
   }
 
   def convert(color: Option[Color]): String = {
-    // none or 6桁の16進数に変換
-    color.fold("none")(value => s"#${"%06X".format(value.colorcode)}")
+    color.fold("none")(value => convert(value.colorcode))
+  }
+
+  def convert(color: Int): String = {
+    // 6桁の16進数に変換
+    s"#${"%06X".format(color)}"
   }
 }
