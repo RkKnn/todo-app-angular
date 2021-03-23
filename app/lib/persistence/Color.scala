@@ -41,6 +41,11 @@ case class ColorRepository[P <: JdbcProfile]()(implicit val driver: P)
           } yield old
         }
     
+    def removeAll(ids: Seq[Id]): Future[_] = 
+      RunDBAction(ColorTable) {
+        _.filter(_.id.inSetBind(ids)).delete
+      }
+
     def remove(id: Id): Future[Option[EntityEmbeddedId]] = ???
         // RunDBAction(CategoryTable) { slick =>
         //   val row = slick.filter(_.id === id)

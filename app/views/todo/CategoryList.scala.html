@@ -13,8 +13,9 @@
 
       <div class="color-palette">
         @for(color <- vv.colorList) {
-          <label for="select_id_@color.id">
-            <input class="color-palette__radio" type="radio" id="select_id_@color.id" name="color" value=@color.id>
+          <label for="radio_id_@color.id">
+            <input class="color-palette__select" type="radio" id="radio_id_@color.id" name="color" value=@color.id>
+                                            @* cssを動的に変更できないのでstyleを直接使用 *@
             <div class="color-palette__item" style="background-color: @lib.model.Color.convert(Some(color.v))"></div> 
           </label>
         }
@@ -32,11 +33,21 @@
       <input type="submit" value="追加">
     }
 
-    <div class="color-palette">
-      @for(color <- vv.colorList) {
-        <div class="color-palette__item" style="background-color: @lib.model.Color.convert(Some(color.v))"></div>
-      }
-    </div>
+    @helper.form(action = controllers.todo.routes.CategoryController.colorDelete()) {
+      @helper.CSRF.formField
+
+      <div class="color-palette">
+        @for(color <- vv.colorList) {
+          <label for="select_id_@color.id">
+            <input class="color-palette__select" type="checkbox" id="select_id_@color.id" name="ids[]" value=@color.id>
+                                            @* cssを動的に変更できないのでstyleを直接使用 *@
+            <div class="color-palette__item color-palette__item-warn" style="background-color: @lib.model.Color.convert(Some(color.v))"></div> 
+          </label>
+        }
+      </div>
+
+      <input type="submit" value="削除">
+    }
   </div>
 </div>
 

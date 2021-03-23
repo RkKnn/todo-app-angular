@@ -182,12 +182,18 @@ body {
   height: 15px;
 }
 
-.color-palette .color-palette__radio {
+.color-palette .color-palette__select {
   display: none;
 }
 
-.color-palette .color-palette__radio:checked + .color-palette__item {
-  border: solid 1px black;
+.color-palette .color-palette__select:checked + .color-palette__item {
+  border-style: double;
+  border-width: 3px;
+  border-color: black;
+}
+
+.color-palette .color-palette__select:checked + .color-palette__item-warn {
+  border-color: red;
 }
 
 .clearfix::after {

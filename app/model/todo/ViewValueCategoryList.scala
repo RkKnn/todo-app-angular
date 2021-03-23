@@ -13,6 +13,7 @@ case class ViewValueCategoryList(
   registerForm: Form[controllers.todo.CategoryRegisterFormData],
   selectIdForm: Form[controllers.todo.SelectIdFormData],
   colorRegisterForm: Form[controllers.todo.ColorRegisterFormData],
+  colorSelectIdForm: Form[controllers.todo.SelectIdFormData],
   categoryList: Seq[Category.EmbeddedId],
   colorRef: lib.persistence.CategoryRepository.ColorRef,
   colorList: Seq[Color.EmbeddedId]

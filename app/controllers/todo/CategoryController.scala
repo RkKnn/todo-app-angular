@@ -29,7 +29,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
     } yield {
       val categoryListVV = ViewValueCategoryList(
         vv,
-        CategoryRegisterFormData.form, SelectIdFormData.selectIdForm, ColorRegisterFormData.form,
+        CategoryRegisterFormData.form, SelectIdFormData.selectIdForm, ColorRegisterFormData.form, SelectIdFormData.selectIdForm,
         value, colorRef, colorList)
       Ok(views.html.todo.CategoryList(categoryListVV))
     }
@@ -43,11 +43,9 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
           colorRef <- CategoryRepository().createColorRef(value)
           colorList <- ColorRepository().getAll
         } yield { 
-          println("error")
-          println(formWithErrors)
           val categoryListVV = ViewValueCategoryList(
             vv,
-            CategoryRegisterFormData.form, SelectIdFormData.selectIdForm, formWithErrors,
+            CategoryRegisterFormData.form, SelectIdFormData.selectIdForm, formWithErrors, SelectIdFormData.selectIdForm,
             value, colorRef, colorList)
           BadRequest(views.html.todo.CategoryList(categoryListVV))
         }
@@ -56,6 +54,21 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
         val color = Color(formData.colorcode)
         for {
           _ <- ColorRepository().add(color)
+        } yield {
+          Redirect(controllers.todo.routes.CategoryController.listPage())
+        }
+      }
+    )
+  }
+
+  def colorDelete() = Action.async { implicit req =>
+    SelectIdFormData.selectIdForm.bindFromRequest().fold (
+      (formWithErrors: Form[SelectIdFormData]) => Future.successful(Redirect(controllers.todo.routes.CategoryController.listPage())),
+      (formData: SelectIdFormData) => {
+        for {
+          _ <- {
+            ColorRepository().removeAll(formData.ids.map(Color.Id(_)))
+          }
         } yield {
           Redirect(controllers.todo.routes.CategoryController.listPage())
         }
@@ -73,7 +86,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
         } yield { 
           val categoryListVV = ViewValueCategoryList(
             vv,
-            formWithErrors, SelectIdFormData.selectIdForm, ColorRegisterFormData.form,
+            formWithErrors, SelectIdFormData.selectIdForm, ColorRegisterFormData.form, SelectIdFormData.selectIdForm,
             value, colorRef, colorList)
           BadRequest(views.html.todo.CategoryList(categoryListVV))
         }
