@@ -18,6 +18,7 @@
                             </p>
                             @vv.category.get(todo) match {
                                 case Some(category) => {
+                                                                      @* cssを動的に変更できないのでstyleを直接使用 *@
                                     <span class="todo-list__category" style="background-color: @lib.model.Color.convert(vv.colorRef.get(category).map(_.v))">#@category.v.name</span>
                                 }
                                 case None => {

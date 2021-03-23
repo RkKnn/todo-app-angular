@@ -3,15 +3,53 @@
 
 <a href="@controllers.routes.HomeController.index()"></a>
 
-@helper.form(action = controllers.todo.routes.CategoryController.register()) {
-  @helper.CSRF.formField
+<div class="clearfix">
+  <div class="category-form">
+    @helper.form(action = controllers.todo.routes.CategoryController.register()) {
+      @helper.CSRF.formField
 
-  @helper.inputText(vv.registerForm("name"))
-  @helper.inputText(vv.registerForm("slug"))
-  @helper.inputText(vv.registerForm("color"))
+      @helper.inputText(vv.registerForm("name"))
+      @helper.inputText(vv.registerForm("slug"))
 
-  <input type="submit" value="追加">
-}
+      <div class="color-palette">
+        @for(color <- vv.colorList) {
+          <label for="radio_id_@color.id">
+            <input class="color-palette__select" type="radio" id="radio_id_@color.id" name="color" value=@color.id>
+                                            @* cssを動的に変更できないのでstyleを直接使用 *@
+            <div class="color-palette__item" style="background-color: @lib.model.Color.convert(Some(color.v))"></div> 
+          </label>
+        }
+      </div>
+
+      <input type="submit" value="追加">
+    }
+  </div>
+
+  <div class="color-form">
+    @helper.form(action = controllers.todo.routes.CategoryController.colorRegister()) {
+      @helper.CSRF.formField
+
+      <input type="color" name="colorcode">
+      <input type="submit" value="追加">
+    }
+
+    @helper.form(action = controllers.todo.routes.CategoryController.colorDelete()) {
+      @helper.CSRF.formField
+
+      <div class="color-palette">
+        @for(color <- vv.colorList) {
+          <label for="select_id_@color.id">
+            <input class="color-palette__select" type="checkbox" id="select_id_@color.id" name="ids[]" value=@color.id>
+                                            @* cssを動的に変更できないのでstyleを直接使用 *@
+            <div class="color-palette__item color-palette__item-warn" style="background-color: @lib.model.Color.convert(Some(color.v))"></div> 
+          </label>
+        }
+      </div>
+
+      <input type="submit" value="削除">
+    }
+  </div>
+</div>
 
 @helper.form(action = controllers.todo.routes.CategoryController.delete()) {
   @helper.CSRF.formField
@@ -19,6 +57,7 @@
   <ul class="category-list">
     @for(category <- vv.categoryList) {
       <input class="category-list__checkbox" type="checkbox" id="select_id_@category.id" name="ids[]" value=@category.id>
+                                                                      @* cssを動的に変更できないのでstyleを直接使用 *@
       <label for="select_id_@category.id" class="category-list__label" style="background-color: @lib.model.Color.convert(vv.colorRef.get(category).map(_.v))">
         <li class="category-list__item">
           <h2 class="category-list__title">@category.v.name</h2>

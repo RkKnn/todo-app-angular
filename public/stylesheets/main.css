@@ -123,6 +123,11 @@ body {
   width: 100%;
 }
 
+.category-form {
+  float: left;
+  margin-right: 50px;
+}
+
 .category-list {
   display: flex;
   flex-wrap: wrap;
@@ -160,6 +165,42 @@ body {
   margin: 0;
 }
 
+.color-form {
+  float: left;
+}
+
+.color-palette {
+  padding: 10px;
+}
+
+.color-palette .color-palette__item {
+  box-sizing: border-box;
+  display: inline-block;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  width: 15px;
+  height: 15px;
+}
+
+.color-palette .color-palette__select {
+  display: none;
+}
+
+.color-palette .color-palette__select:checked + .color-palette__item {
+  border-style: double;
+  border-width: 3px;
+  border-color: black;
+}
+
+.color-palette .color-palette__select:checked + .color-palette__item-warn {
+  border-color: red;
+}
+
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
 
 /******* フォームのinfoを非表示に *******/
 .info {
