@@ -30,8 +30,13 @@
     </header>
     <main class="main">
       <h1>@vv.title</h1>
+
+      <app-root></app-root>
+      <hello-elements display-text="angular elements"></hello-elements>
+
       @content
     </main>
+
     @for(js <- vv.jsSrc) {
       <script src="@{routes.Assets.versioned("javascripts/" + js)}" type="text/javascript"></script>
     }
