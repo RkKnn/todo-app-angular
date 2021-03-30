@@ -10,9 +10,9 @@
             @for(todo <- vv.todoList) {
                 <label for="trush_id_@todo.id">
                     <input class="todo-list__trush-checkbox" type="checkbox" id="trush_id_@todo.id" name="ids[]" value=@todo.id>
-                        <li class="todo-list__item todo-list__item_@todo.state todo-list__item_open">
-                        <h2>@todo.title</h2>
-                        <p>@todo.body</p>
+                        <li class="todo-list__item todo-list__item_@todo.v.state todo-list__item_open">
+                        <h2>@todo.v.title</h2>
+                        <p>@todo.v.body</p>
                     </li>
                 </label>
             }

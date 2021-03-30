@@ -5,11 +5,11 @@ import play.api.mvc._
 import play.api.data._
 import play.api.i18n._
 
-import lib.persistence.onMySQL.driver
+// import lib.persistence.onMySQL.driver
+import lib.persistence.default._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import model.ViewValueHome
-import lib.persistence.{CategoryRepository, ColorRepository}
 import model.todo.ViewValueCategoryList
 import lib.model.{Category, Color}
 
@@ -23,9 +23,9 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
 
   def listPage() = Action.async { implicit req =>
     for {
-      value <- CategoryRepository().getAll
-      colorRef <- CategoryRepository().createColorRef(value)
-      colorList <- ColorRepository().getAll
+      value <- CategoryRepository.getAll
+      colorRef <- CategoryRepository.createColorRef(value)
+      colorList <- ColorRepository.getAll
     } yield {
       val categoryListVV = ViewValueCategoryList(
         vv,
@@ -39,9 +39,9 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
     ColorRegisterFormData.form.bindFromRequest().fold (
       (formWithErrors: Form[ColorRegisterFormData]) => {
         for {
-          value <- CategoryRepository().getAll
-          colorRef <- CategoryRepository().createColorRef(value)
-          colorList <- ColorRepository().getAll
+          value <- CategoryRepository.getAll
+          colorRef <- CategoryRepository.createColorRef(value)
+          colorList <- ColorRepository.getAll
         } yield { 
           val categoryListVV = ViewValueCategoryList(
             vv,
@@ -53,7 +53,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
       (formData: ColorRegisterFormData) => {
         val color = Color(formData.colorcode)
         for {
-          _ <- ColorRepository().add(color)
+          _ <- ColorRepository.add(color)
         } yield {
           Redirect(controllers.todo.routes.CategoryController.listPage())
         }
@@ -67,7 +67,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
       (formData: SelectIdFormData) => {
         for {
           _ <- {
-            ColorRepository().removeAll(formData.ids.map(Color.Id(_)))
+            ColorRepository.removeAll(formData.ids.map(Color.Id(_)))
           }
         } yield {
           Redirect(controllers.todo.routes.CategoryController.listPage())
@@ -80,9 +80,9 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
     CategoryRegisterFormData.form.bindFromRequest().fold (
       (formWithErrors: Form[CategoryRegisterFormData]) => {
         for {
-          value <- CategoryRepository().getAll
-          colorRef <- CategoryRepository().createColorRef(value)
-          colorList <- ColorRepository().getAll
+          value <- CategoryRepository.getAll
+          colorRef <- CategoryRepository.createColorRef(value)
+          colorList <- ColorRepository.getAll
         } yield { 
           val categoryListVV = ViewValueCategoryList(
             vv,
@@ -94,7 +94,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
       (formData: CategoryRegisterFormData) => {
         val category = Category(formData.name, formData.slug, formData.color)
         for {
-          _ <- CategoryRepository().add(category)
+          _ <- CategoryRepository.add(category)
         } yield {
           Redirect(controllers.todo.routes.CategoryController.listPage())
         }
@@ -108,7 +108,7 @@ class CategoryController @Inject()(val controllerComponents: ControllerComponent
       (formData: SelectIdFormData) => {
         for {
           _ <- {
-            CategoryRepository().removeAll(formData.ids.map(Category.Id(_)))
+            CategoryRepository.removeAll(formData.ids.map(Category.Id(_)))
           }
         } yield {
           Redirect(controllers.todo.routes.CategoryController.listPage())

@@ -35,30 +35,4 @@ object Todo {
     case object IN_PROGRESS extends StateType(code = 1, state = 1)
     case object DONE        extends StateType(code = 2, state = 2)
   }
-
-  type CategoryRef = Map[Todo, Category.EmbeddedId]
-  def createCategoryRef(todo: Seq[Todo.EmbeddedId], categories: Seq[Category.EmbeddedId]): CategoryRef = {
-    val categoryIdMap: Map[Category.Id, Category.EmbeddedId] = (for {
-      category <- categories
-    } yield (category.id -> category)).toMap
-
-    val categoryMap: Map[Todo, Category.EmbeddedId] = (for {
-      value <- todo
-      category <- categoryIdMap.get(value.v.categoryId)
-    } yield (value.v -> category)).toMap
-
-    categoryMap
-  }
-
-  // type CategoryRef = Map[Todo, Seq[Category]]
-  // def createCategoryRef(todo: Seq[Todo.EmbeddedId], categories: Seq[Category.EmbeddedId]): CategoryRef = {
-  //   val categoryIdMap: Map[Category.Id, Seq[Category.EmbeddedId]] = categories.groupBy(_.id)
-
-  //   val categoryMap: Map[Todo, Seq[Category]] = (for {
-  //     value <- todo
-  //     category <- categoryIdMap.get(value.v.categoryId)
-  //   } yield (value.v -> category.map(_.v))).toMap
-
-  //   categoryMap.withDefaultValue(Seq.empty)
-  // }
 }
