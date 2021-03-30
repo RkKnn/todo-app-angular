@@ -31,13 +31,14 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
     def listPage() = Action.async { implicit request => 
         for {
             todo <- TodoRepository.getAll
+            categoryRef <- TodoRepository.createCategoryRef(todo)
             category <- CategoryRepository.getAll
             colorRef <- CategoryRepository.createColorRef(category)
         } yield {
             val todoListVV = ViewValueList(
                 vv,
                 RegisterFormData.registerForm, SelectIdFormData.selectIdForm,
-                todo.map(_.v), Todo.createCategoryRef(todo, category), colorRef)
+                todo, categoryRef, colorRef)
             Ok(views.html.todo.List(todoListVV))
         }
         // TodoRepository.getAll.map { value => 
@@ -49,13 +50,14 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
     def trushPage() = Action.async { implicit request => 
         for {
             todo <- TodoRepository.getAll
+            categoryRef <- TodoRepository.createCategoryRef(todo)
             category <- CategoryRepository.getAll
             colorRef <- CategoryRepository.createColorRef(category)
         } yield {
             val todoListVV = ViewValueList(
                 vv.copy(title = "ゴミ箱"),
                 RegisterFormData.registerForm, SelectIdFormData.selectIdForm,
-                todo.map(_.v), Todo.createCategoryRef(todo, category), colorRef)
+                todo, categoryRef, colorRef)
             Ok(views.html.todo.Trush(todoListVV))
         }
         // TodoRepository.getAll.map { value => 
@@ -69,13 +71,14 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
             (formWithErrors: Form[RegisterFormData]) => {
                 for {
                     todo <- TodoRepository.getAll
+                    categoryRef <- TodoRepository.createCategoryRef(todo)
                     category <- CategoryRepository.getAll
                     colorRef <- CategoryRepository.createColorRef(category)
                 } yield { 
                     val todoListVV = ViewValueList(
                         vv,
                         formWithErrors, SelectIdFormData.selectIdForm,
-                        todo.map(_.v), Todo.createCategoryRef(todo, category), colorRef)
+                        todo, categoryRef, colorRef)
                     // Ok(views.html.todo.List(todoListVV))
                     BadRequest(views.html.todo.List(todoListVV))
                 }
