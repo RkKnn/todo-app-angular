@@ -101,9 +101,9 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
           } yield old
         }
 
-    def createCategoryRef(todoList: Seq[Todo.EmbeddedId]): Future[TodoRepository.CategoryRef] = {
+    def createCategoryRef(categoriyIdsFromTodo: Seq[Category.Id]): Future[TodoRepository.CategoryRef] = {
       val getCategories: Future[Seq[Category.EmbeddedId]] = RunDBAction(CategoryTable, "slave") {
-        _.filter(_.id.inSetBind(todoList.map(_.v.categoryId))).result
+        _.filter(_.id.inSetBind(categoriyIdsFromTodo)).result
       }
 
       for {
@@ -113,8 +113,8 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
           category.id -> category
         }.toMap
 
-        categoryRef = todoList.map { todo =>
-          todo -> categoryIdMap.get(todo.v.categoryId)
+        categoryRef = categoriyIdsFromTodo.map { categoryId =>
+          categoryId -> categoryIdMap.get(categoryId)
         }.toMap.collect {
           case (key, Some(value)) => key -> value
         }
@@ -124,5 +124,5 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
 }
 
 object TodoRepository {
-  type CategoryRef = Map[Todo.EmbeddedId, Category.EmbeddedId]
+  type CategoryRef = Map[Category.Id, Category.EmbeddedId]
 }

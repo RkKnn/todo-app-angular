@@ -31,7 +31,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
     def listPage() = Action.async { implicit request => 
         for {
             todo <- TodoRepository.getAll
-            categoryRef <- TodoRepository.createCategoryRef(todo)
+            categoryRef <- TodoRepository.createCategoryRef(todo.map(_.v.categoryId))
             category <- CategoryRepository.getAll
             colorRef <- CategoryRepository.createColorRef(category)
         } yield {
@@ -50,7 +50,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
     def trushPage() = Action.async { implicit request => 
         for {
             todo <- TodoRepository.getAll
-            categoryRef <- TodoRepository.createCategoryRef(todo)
+            categoryRef <- TodoRepository.createCategoryRef(todo.map(_.v.categoryId))
             category <- CategoryRepository.getAll
             colorRef <- CategoryRepository.createColorRef(category)
         } yield {
@@ -71,7 +71,7 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
             (formWithErrors: Form[RegisterFormData]) => {
                 for {
                     todo <- TodoRepository.getAll
-                    categoryRef <- TodoRepository.createCategoryRef(todo)
+                    categoryRef <- TodoRepository.createCategoryRef(todo.map(_.v.categoryId))
                     category <- CategoryRepository.getAll
                     colorRef <- CategoryRepository.createColorRef(category)
                 } yield { 
