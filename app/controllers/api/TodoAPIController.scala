@@ -15,7 +15,7 @@ class TodoAPIController @Inject()(val controllerComponents: ControllerComponents
     for {
       todoList: Seq[Todo.EmbeddedId] <- TodoRepository.getAll
     } yield {
-      val todosJson = Seq(todoList.map(TodoWrites.createTodoWrites))
+      val todosJson = todoList.map(TodoWrites.createTodoWrites)
       Ok(Json.toJson(todosJson))
     }
   }
