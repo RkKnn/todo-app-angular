@@ -7,6 +7,7 @@ import slick.jdbc.JdbcProfile
 import ixias.model.{Entity, IdStatus}
 import shapeless.tag
 import java.time.LocalDateTime
+import lib.model.Category
 
 case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[Todo.Id, Todo, P]
@@ -99,4 +100,29 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
             }
           } yield old
         }
+
+    def createCategoryRef(todoList: Seq[Todo.EmbeddedId]): Future[TodoRepository.CategoryRef] = {
+      val getCategories: Future[Seq[Category.EmbeddedId]] = RunDBAction(CategoryTable, "slave") {
+        _.filter(_.id.inSetBind(todoList.map(_.v.categoryId))).result
+      }
+
+      for {
+        categories <- getCategories
+
+        categoryIdMap: Map[Category.Id, Category.EmbeddedId] = categories.map { category =>
+          category.id -> category
+        }.toMap
+
+        categoryRef = todoList.map { todo =>
+          todo -> categoryIdMap.get(todo.v.categoryId)
+        }.toMap.collect {
+          case (key, Some(value)) => key -> value
+        }
+      } yield categoryRef
+    }
+
+}
+
+object TodoRepository {
+  type CategoryRef = Map[Todo.EmbeddedId, Category.EmbeddedId]
 }

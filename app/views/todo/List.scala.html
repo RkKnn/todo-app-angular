@@ -11,10 +11,10 @@
             @for(todo <- vv.todoList) {
                 <label for="select_id_@todo.id">
                     <input class="todo-list__checkbox" type="checkbox" id="select_id_@todo.id" name="ids[]" value=@todo.id>
-                        <li class="todo-list__item todo-list__item_@todo.state">
-                            <h2>@todo.title</h2>
+                        <li class="todo-list__item todo-list__item_@todo.v.state">
+                            <h2>@todo.v.title</h2>
                             <p>
-                                <pre>@todo.body</pre>
+                                <pre>@todo.v.body</pre>
                             </p>
                             @vv.category.get(todo) match {
                                 case Some(category) => {
