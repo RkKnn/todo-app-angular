@@ -7,7 +7,7 @@ import play.api.mvc._
 import javax.inject._
 import lib.persistence.default._
 import lib.model.Todo
-import controllers.json.{ TodoWrites, RegisterJson }
+import controllers.json.{ TodoJson, RegisterJson, CategoryJson }
 import play.api.libs.json.JsResult
 import play.api.libs.json.JsSuccess
 import play.api.libs.json.JsError
@@ -19,8 +19,26 @@ class TodoAPIController @Inject()(val controllerComponents: ControllerComponents
     for {
       todoList: Seq[Todo.EmbeddedId] <- TodoRepository.getAll
     } yield {
-      val todosJson = todoList.map(TodoWrites.createTodoWrites)
+      val todosJson = todoList.map(TodoJson.createTodoJson)
       Ok(Json.toJson(todosJson))
+    }
+  }
+
+  def categoryRef = Action.async { implicit request =>
+    val json = for {
+      json <- request.body.asJson
+    } yield json.validate[Seq[Int]]
+
+    json match {
+      case Some(JsSuccess(value, path)) => {
+        for {
+          categoryRef <- TodoRepository.createCategoryRef(value.map(Category.Id(_)))
+          categoryRefJson: Map[Long, CategoryJson] = categoryRef.transform((key, value) => CategoryJson.createCategoryJson(value))
+        } yield {
+          Ok(Json.toJson(categoryRefJson))
+        }
+      }
+      case _ => Future.successful((InternalServerError))
     }
   }
 
