@@ -24,6 +24,10 @@ class TodoAPIController @Inject()(val controllerComponents: ControllerComponents
     }
   }
 
+  def stateTypes = Action { implicit request =>
+    Ok(Json.toJson(Todo.StateType.values.map(_.toString())))
+  }
+
   def categoryRef = Action.async { implicit request =>
     val json = for {
       json <- request.body.asJson

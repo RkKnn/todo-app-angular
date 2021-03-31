@@ -21,6 +21,7 @@ POST    /category/colorRegister       controllers.todo.CategoryController.colorR
 POST    /category/colorDelete         controllers.todo.CategoryController.colorDelete()
 
 GET     /api/todos                    controllers.api.TodoAPIController.todos()
+GET     /api/stateTypes               controllers.api.TodoAPIController.stateTypes()
 POST    /api/categoryRef              controllers.api.TodoAPIController.categoryRef()
 POST    /api/register                 controllers.api.TodoAPIController.register()
 POST    /api/delete                   controllers.api.TodoAPIController.delete()
