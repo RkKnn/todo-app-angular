@@ -21,6 +21,11 @@ POST    /category/colorRegister       controllers.todo.CategoryController.colorR
 POST    /category/colorDelete         controllers.todo.CategoryController.colorDelete()
 
 GET     /api/todos                    controllers.api.TodoAPIController.todos()
+GET     /api/stateTypes               controllers.api.TodoAPIController.stateTypes()
+POST    /api/categoryRef              controllers.api.TodoAPIController.categoryRef()
+POST    /api/register                 controllers.api.TodoAPIController.register()
+POST    /api/delete                   controllers.api.TodoAPIController.delete()
+GET     /api/category/all             controllers.api.CategoryAPIController.categories()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
